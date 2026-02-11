@@ -27,3 +27,8 @@
 
 ## 📸 Скриншоты 
 
+![desktop_screenshot](assets/desktop_screenshot.png)
+
+![desktop_table_screenshot](assets/desktop_table_screenshot.png)
+
+![desktop_tasks_screenshot](assets/desktop_tasks_screenshot.png)
