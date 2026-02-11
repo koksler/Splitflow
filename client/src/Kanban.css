@@ -1,0 +1,86 @@
+/* Kanban.css */
+
+.kanban-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    
+    flex: 1; 
+    min-height: 0; 
+    
+    margin-top: 10px;
+    padding-bottom: 0;
+    margin-bottom: 80px;
+  }
+  
+  /* --- КОЛОНКА --- */
+  .kanban-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    min-width: 0;
+    overflow: hidden; 
+  }
+  
+  /* --- ХЕДЕР КОЛОНКИ --- */
+  .column-header {
+    border: 2px solid var(--color-stroke);
+    max-width: 435px;
+    background-color: #FFFFFF;
+    border-radius: var(--radius-card-task);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 5px 0 20px; 
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .status-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .circle-todo { border: 2px solid var(--color-stroke); }
+  .circle-progress { background-color: var(--color-yellow); border: 2px solid #FFF; box-shadow: 0 0 0 1px var(--color-yellow); }
+  .circle-done { background-color: var(--color-green); }
+  
+  .column-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+    text-transform: uppercase;
+  }
+  
+  .task-count {
+    font-size: 18px;
+    color: var(--color-text-gray);
+    margin-left: 8px;
+  }  
+  .task-list {
+    flex-grow: 1;
+    overflow-y: auto; 
+    padding-bottom: 20px;
+    padding-right: 4px; 
+    
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .task-list::-webkit-scrollbar { 
+    display: none; 
+  }

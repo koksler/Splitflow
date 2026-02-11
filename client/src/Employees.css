@@ -1,0 +1,108 @@
+/* Employees.css */
+
+.employees-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 20px;
+  }
+  
+  /* --- ЗАГОЛОВОК И ПОИСК --- */
+  .employees-header-block {
+    margin-bottom: 20px;
+  }
+  
+  .page-title {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--color-text);
+  }
+  
+  .search-bar {
+    width: 100%;
+    max-width: 800px; /* Ограничим ширину поиска */
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 16px 24px;
+    font-family: 'Onest', sans-serif;
+    font-size: 16px;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    outline: none;
+    transition: all 0.2s;
+  }
+  .search-bar:focus {
+    border-color: var(--color-accentum);
+  }
+  
+  /* --- СЕТКА ТАБЛИЦЫ --- */
+  /* Определяем ширину колонок: 
+     1. Сотрудник (широкая)
+     2. ID (узкая)
+     3. Email (широкая)
+     ... и так далее
+  */
+  .grid-table {
+    display: grid;
+    grid-template-columns: 2fr 0.5fr 2fr 1.5fr 1.5fr 1.5fr 0.8fr 1fr 0.5fr; 
+    gap: 10px;
+    align-items: center;
+  }
+  
+  /* --- ШАПКА ТАБЛИЦЫ --- */
+  .table-header {
+    background-color: #E2E4EB;
+    border-radius: 16px 16px 0 0;
+    padding: 15px 20px;
+    
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+  }
+  
+  .table-body {
+    overflow-y: auto;
+    flex-grow: 1;
+    
+    border-radius: 0 0 16px 16px; 
+    
+    padding-bottom: 80px;
+    
+    scrollbar-width: none;
+  }
+  .table-body::-webkit-scrollbar { display: none; }
+  
+  .table-row {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--color-stroke);
+    padding: 15px 20px;
+    font-size: 14px;
+    color: var(--color-text);
+    transition: background 0.1s;
+  }
+  .table-row:hover {
+    background-color: #F8F9FC;
+  }
+  .table-row:last-child {
+    border-bottom: none;
+  }
+  
+  .cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* KPI бейдж */
+  .kpi-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .kpi-A, .kpi-A-plus { background: #E6FFFA; color: #00C458; }
+  .kpi-B, .kpi-B-plus { background: #FFFAF0; color: #B7791F; }
+  .kpi-C { background: #FFF5F5; color: #FF2F1C; }

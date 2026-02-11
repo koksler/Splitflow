@@ -1,0 +1,37 @@
+.obsidian/
+splitflow_prod_Windows/
+publish-linux/
+node_modules/
+misc/
+client/node_modules/
+client/dist/
+dist/
+build/
+
+# .NET build
+bin/
+obj/
+
+# Rider / VS
+.vs/
+.idea/
+*.user
+*.suo
+
+# Publish
+publish/
+*.publishsettings
+
+SplitflowApi/bin/
+SplitflowApi/obj/
+
+.env
+.env.*
+appsettings.Development.json
+appsettings.Local.json
+appsettings.json
+
+*.log
+logs/
+
+client\dist\avatars

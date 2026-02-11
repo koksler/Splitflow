@@ -1,0 +1,51 @@
+/* Контейнер бейджа */
+.task-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 4px; 
+    height: 28px; 
+    border-radius: 8px; 
+    background-color: #FDFDFF; 
+    border: 1px solid var(--color-stroke);
+    
+    font-family: 'Onest', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-gray);
+    text-transform: uppercase;
+    width: fit-content;
+  }
+  
+  .status-indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .status-todo {
+    border: 2px solid var(--color-stroke);
+    background: transparent;
+  }
+  
+  .status-progress {
+    background-color: var(--color-yellow);
+    border: 2px solid #FDFDFF; /* Эффект как на скрине */
+    box-shadow: 0 0 0 1px var(--color-yellow); /* Внешнее кольцо */
+  }
+  
+  .status-done {
+    background-color: var(--color-green);
+  }
+  
+  .date-badge {
+    padding-left: 10px;
+  }
+  .date-badge svg {
+    color: var(--color-text-gray);
+    width: 16px;
+    height: 16px;
+  }

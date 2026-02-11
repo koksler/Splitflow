@@ -1,0 +1,141 @@
+/* Header.css */
+
+.header-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 12px 15px;
+    width: 100%;
+    max-width: 1600px; 
+    margin: 0 auto;
+  }
+  
+  .island {
+    border: 2px solid var(--color-stroke);
+    background-color: #FFFFFF;
+    height: 70px; 
+    padding: 5px; 
+    border-radius: var(--radius-btn); 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .profile-island {
+    padding-right: 10px; 
+    padding-left: 10px;
+    min-width: 280px;
+    justify-content: space-between;
+  }
+  
+  .avatar-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #ffe4c4; 
+  }
+  
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 10px;
+  }
+  
+  .profile-name {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--color-text);
+    line-height: 1.1;
+  }
+  
+  .profile-role {
+    font-size: 12px;
+    color: var(--color-text-gray);
+  }
+  
+  .nav-island {
+    gap: 0;
+    padding: 0px 5px;
+  }
+  
+  .nav-item {
+    height: 50px; 
+    padding: 0 24px;
+    border-radius: var(--radius-btn);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--color-text-gray);
+    font-weight: 500;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+  }
+  
+  .nav-item.active {
+    background-color: var(--color-accentum);
+    color: white;
+  }
+  
+  .nav-item svg {
+    width: 22px;
+    height: 22px;
+  }
+  
+  
+  .project-island {
+    padding: 5px 10px;
+  }
+  
+  .project-selector {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 10px 0 12px;
+    border-radius: var(--radius-btn);
+    border: 2px solid var(--color-stroke);
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  .project-selector:hover {
+    background-color: var(--color-bg-work);
+  }
+  
+  .project-icon-box {
+    width: 30px;
+    height: 30px;
+    background-color: #FF5656; 
+    border-radius: var(--icon-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-right: 12px;
+  }
+  
+  .project-text-box {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+  }
+  
+  .project-label {
+    font-size: 10px;
+    color: var(--color-text-gray);
+  }
+  .project-name {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+  }

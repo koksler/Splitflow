@@ -1,0 +1,104 @@
+/* index.css */
+:root {
+  /* --- Цветовая палитра --- */
+  
+  /* Основные */
+  --color-accentum: #3a374b;
+  --color-bg: #FDFDFF;
+  --color-bg-work: #EEEFF4;
+  
+  /* Текст */
+  --color-text: #1F1E22;
+  --color-text-gray: #7F7C8D;
+  
+  /* Декорации */
+  --color-stroke: #E5E8F0;
+  
+  /* Статусы */
+  --color-red: #FF2F1C;
+  --color-yellow: #FFB71B;
+  --color-green: #00C458;
+
+  --color-project-red: #FF5656;
+  --color-project-blue: #4E6AFF;
+  --color-project-orange: #FFB71B;
+
+  --font-main: "Onest", sans-serif;
+  
+  --radius-btn: 15px;
+  --radius-card: 30px; 
+  --icon-radius: 5px;
+  --radius-card-task: 15px;
+  
+  /* Тень для карточки: Y:15, Blur:25, Color 1D1D1D (5%) */
+  --shadow-card: 0px 15px 25px rgba(29, 29, 29, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.showcase {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.icon-row {
+  display: flex;
+  gap: 16px;
+}
+
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-work); 
+  overflow: hidden; 
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 40px;
+  
+  overflow: hidden;
+  min-height: 0; 
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(4px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; 
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  animation: modalFadeIn 0.2s ease-out;
+}
