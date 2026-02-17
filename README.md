@@ -1,4 +1,4 @@
-<img src="/assets/github_header.png" alt = "splitflow_logo">
+<img src="/assets/ui/github_header.png" alt = "splitflow_logo">
 
 ### Splitflow
 
@@ -27,8 +27,8 @@
 
 ## 📸 Скриншоты 
 
-![desktop_screenshot](assets/desktop_screenshot.png)
+![desktop_screenshot](assets/ui/desktop_screenshot.png)
 
-![desktop_table_screenshot](assets/desktop_table_screenshot.png)
+![desktop_table_screenshot](assets/ui/employees_table.png)
 
-![desktop_tasks_screenshot](assets/desktop_tasks_screenshot.png)
+![desktop_tasks_screenshot](assets/ui/kanban_board.png)
