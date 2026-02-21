@@ -1,4 +1,4 @@
-<img src="/assets/ui/github_header.png" alt = "splitflow_logo">
+<img src="/assets/github_header.png" alt = "splitflow_logo">
 
 ### Splitflow
 
