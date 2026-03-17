@@ -53,7 +53,7 @@ const Login = ({ onLogin, onGoToSetup }) => {
                         корпоративную почту или почту одобренную комитетом.
                         <br /><br />
                         Продолжая вы соглашаетесь с текущим уставом<br />
-                        ВИСК Анкерланда
+                        ВИСК Анкерлянда
                     </p>
 
                     <div className="login-divider">
@@ -65,14 +65,13 @@ const Login = ({ onLogin, onGoToSetup }) => {
                     </Button>
                 </div>
 
-                {/* Логотип в подвале (VISK) */}
+                {/* Логотип в подвале */}
                 <img src="/logo-visk.png" alt="VISK" className="login-logo-footer" />
             </div>
             
-            {/* ПРАВАЯ ЧАСТЬ (Вектор с картинкой) */}
+            {/* ПРАВАЯ ЧАСТЬ */}
             <div className="login-cover-section">
                 <div className="login-cover-vector">
-                    {/* Сюда кладется картинка castle.png, переименованная в cover-image.png */}
                     <img src="/cover-image.png" alt="Cover" className="login-cover-image" />
                 </div>
             </div>

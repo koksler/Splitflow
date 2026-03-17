@@ -17,13 +17,17 @@ import { PROJECTS } from './constants';
 import './index.css';
 import './App.css';
 
+const SETUP_API_URL = "http://localhost:5268/api/setup/status";
 const AUTH_API_URL = "http://localhost:5268/api/auth/login";
 const TASKS_API_URL = "http://localhost:5268/api/tasks";
 
 function App() {
+  // --- STATE: ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ ---
+  const [isAppReady, setIsAppReady] = useState(false);
+
   // --- STATE: РОУТИНГ АВТОРИЗАЦИИ ---
   // 'login' | 'setup'
-  const [authScreen, setAuthScreen] = useState('login'); 
+  const [authScreen, setAuthScreen] = useState(null); 
 
   // --- STATE: ДАННЫЕ ПОЛЬЗОВАТЕЛЯ ---
   const [user, setUser] = useState(null);
@@ -44,8 +48,36 @@ function App() {
   const handleNextStatus = async (task) => { /* ...твой старый код... */ };
 
   useEffect(() => {
-    if (user) fetchTasks();
-  }, [user]);
+    const checkDbStatus = async () => {
+      try {
+        const response = await fetch(SETUP_API_URL);
+        if (response.ok) {
+          const data = await response.json();
+          // Если БД настроена -> кидаем на логин. Если нет -> на сетап.
+          setAuthScreen(data.isConfigured ? 'login' : 'setup');
+        } else {
+          // Если апишка вернула ошибку, на всякий случай кидаем на сетап
+          setAuthScreen('setup');
+        }
+      } catch (error) {
+        console.error("Бэкенд недоступен:", error);
+        // Если бэкенд вообще лежит (CORS или не запущен) - покажем форму настройки
+        setAuthScreen('setup');
+      } finally {
+        setIsAppReady(true); // Приложение готово к отрисовке
+      }
+    };
+
+    checkDbStatus();
+  },[]);
+
+  if (!isAppReady) {
+    return (
+      <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'var(--color-bg)' }}>
+        <p style={{ color: 'var(--color-text-gray)' }}>Загрузка Splitflow...</p>
+      </div>
+    );
+  }
 
   const filteredTasks = tasks.filter(t => {
     if (currentProject === PROJECTS.ALL.id) return true;
