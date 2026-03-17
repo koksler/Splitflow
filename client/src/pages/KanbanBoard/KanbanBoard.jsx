@@ -1,7 +1,10 @@
 import React from 'react';
-import { Plus } from 'lucide-react';
+
+// Поднимаемся в src, затем в components
 import TaskCard from '../../components/TaskCard/TaskCard';
-import './Kanban.css';
+
+// Стили в той же папке
+import './KanbanBoard.css';
 
 // --- КОМПОНЕНТ ЗАГОЛОВКА КОЛОНКИ ---
 const ColumnHeader = ({ status, count, onAdd }) => {
