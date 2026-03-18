@@ -1,191 +1,114 @@
 import React, { useState, useEffect } from 'react';
-
-// Компоненты (Layout)
 import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import TaskModal from './components/TaskModal/TaskModal';
-
-// Страницы (Pages)
 import Dashboard from './pages/Dashboard/Dashboard';
 import KanbanBoard from './pages/KanbanBoard/KanbanBoard';
 import EmployeesTable from './pages/EmployeesTable/EmployeesTable';
 import Login from './pages/Auth/Login';
 import SetupDB from './pages/Auth/SetupDB';
 
-// Стили и Константы
-import { PROJECTS } from './constants';
 import './index.css';
 import './App.css';
 
 const SETUP_API_URL = "http://localhost:5268/api/setup/status";
 const AUTH_API_URL = "http://localhost:5268/api/auth/login";
-const TASKS_API_URL = "http://localhost:5268/api/tasks";
+
+import { PROJECTS } from './constants'
 
 function App() {
-  // --- STATE: ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ ---
-  const [isAppReady, setIsAppReady] = useState(false);
-
-  // --- STATE: РОУТИНГ АВТОРИЗАЦИИ ---
-  // 'login' | 'setup'
-  const [authScreen, setAuthScreen] = useState(null); 
-
-  // --- STATE: ДАННЫЕ ПОЛЬЗОВАТЕЛЯ ---
+  const [authScreen, setAuthScreen] = useState(null);
   const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('analytics'); 
 
-  // --- STATE: ИНТЕРФЕЙС ---
-  const[activeTab, setActiveTab] = useState('dashboard');
-  const [currentProject, setCurrentProject] = useState(PROJECTS.ALL.id);
+  const[currentProject, setCurrentProject] = useState(PROJECTS?.ALL?.id || 'ALL');
 
-  // --- STATE: ЗАДАЧИ ---
-  const[tasks, setTasks] = useState([]);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [modalStatus, setModalStatus] = useState('todo');
-
-  // ЛОГИКА ЗАДАЧ (Осталась без изменений)
-  const fetchTasks = async () => { /* ...твой старый код... */ };
-  const handleCreateTask = async (newTaskData) => { /* ...твой старый код... */ };
-  const handleDeleteTask = async (id) => { /* ...твой старый код... */ };
-  const handleNextStatus = async (task) => { /* ...твой старый код... */ };
-
+  // Инициализация
   useEffect(() => {
-    const checkDbStatus = async () => {
+    const checkInitialStatus = async () => {
       try {
-        const response = await fetch(SETUP_API_URL);
-        if (response.ok) {
-          const data = await response.json();
-          // Если БД настроена -> кидаем на логин. Если нет -> на сетап.
-          setAuthScreen(data.isConfigured ? 'login' : 'setup');
-        } else {
-          // Если апишка вернула ошибку, на всякий случай кидаем на сетап
-          setAuthScreen('setup');
-        }
-      } catch (error) {
-        console.error("Бэкенд недоступен:", error);
-        // Если бэкенд вообще лежит (CORS или не запущен) - покажем форму настройки
+        const res = await fetch(SETUP_API_URL);
+        const data = await res.json();
+        setAuthScreen(data.isConfigured ? 'login' : 'setup');
+      } catch (err) {
         setAuthScreen('setup');
-      } finally {
-        setIsAppReady(true); // Приложение готово к отрисовке
       }
     };
+    checkInitialStatus();
+  }, []);
 
-    checkDbStatus();
-  },[]);
-
-  if (!isAppReady) {
-    return (
-      <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'var(--color-bg)' }}>
-        <p style={{ color: 'var(--color-text-gray)' }}>Загрузка Splitflow...</p>
-      </div>
-    );
-  }
-
-  const filteredTasks = tasks.filter(t => {
-    if (currentProject === PROJECTS.ALL.id) return true;
-    return t.project?.toLowerCase() === currentProject.toLowerCase();
-  });
-
-  const openAddModal = (status) => {
-    setModalStatus(status);
-    setModalOpen(true);
-  };
-
-  // ОБНОВЛЕННАЯ ЛОГИКА АВТОРИЗАЦИИ
   const handleLogin = async (email, password) => {
     try {
-      const response = await fetch(AUTH_API_URL, {
+      const res = await fetch(AUTH_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok) {
+      if (res.ok) {
         setUser(data.user);
       } else {
-        alert("Ошибка: " + data.message);
+        alert("Ошибка входа: " + data.message);
       }
-    } catch (error) {
-      alert("Сервер не отвечает. Убедись, что dotnet run запущен.");
+    } catch (err) {
+      alert("Сервер не доступен");
     }
   };
 
   const handleLogout = () => {
     setUser(null);
-    setTasks([]); // Очищаем задачи при выходе
-    setAuthScreen('login'); // На всякий случай сбрасываем на экран логина
+    setAuthScreen('login');
+    setActiveTab('analytics');
+    setCurrentProject(PROJECTS?.ALL?.id || 'ALL');
   };
 
-  // --- РЕНДЕРИНГ КОНТЕНТА (ДЛЯ АВТОРИЗОВАННОГО) ---
-  const renderContent = () => {
+  const goToSetup = () => setAuthScreen('setup');
+  const goToLogin = () => setAuthScreen('login');
+
+  const renderMainContent = () => {
     switch (activeTab) {
-      case 'dashboard':
-        return <Dashboard tasks={tasks} />;
-      case 'tasks':
-        return (
-          <KanbanBoard
-            tasks={filteredTasks}
-            onAdd={openAddModal}
-            onDelete={handleDeleteTask}
-            onNextStatus={handleNextStatus}
-          />
-        );
-      case 'employees':
-        return <EmployeesTable />;
-      default:
-        return <Dashboard />;
+      case 'analytics': return <Dashboard />;
+      case 'kanban': return <KanbanBoard currentProject={currentProject}/>;
+      case 'employees': return <EmployeesTable />;
+      default: return <Dashboard />;
     }
   };
 
-  // --- ГЛАВНЫЙ RETURN ПРИЛОЖЕНИЯ ---
+  // Как всё рендерится
 
-  // 1. ЕСЛИ ПОЛЬЗОВАТЕЛЬ ВОШЕЛ (Основной интерфейс)
   if (user) {
     return (
-      <div className="app-container">
+      <div key="main" className="page-transition-enter app-layout">
         <Header
           user={user}
-          onLogout={handleLogout}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          currentProject={currentProject}
-          setCurrentProject={setCurrentProject}
+          onTabChange={setActiveTab}
+          onLogout={handleLogout}
         />
-
-        <div className="app-content">
-          {renderContent()}
-        </div>
-
-        {isModalOpen && (
-          <TaskModal
-            isOpen={isModalOpen}
-            onClose={() => setModalOpen(false)}
-            onSave={handleCreateTask}
-            initialStatus={modalStatus}
-            currentProject={currentProject}
-            currentUser={user}
-          />
-        )}
+        <main className="main-viewport">
+          {renderMainContent()}
+        </main>
       </div>
     );
   }
 
-  // 2. ЕСЛИ НЕ ВОШЕЛ (ЭКРАНЫ АВТОРИЗАЦИИ)
-  // Тут работает наш мини-роутер
   if (authScreen === 'setup') {
     return (
-      <SetupDB 
-        onSetupComplete={() => setAuthScreen('login')} 
-        onGoToLogin={() => setAuthScreen('login')} 
-      />
+      <div key="setup" className="page-transition-enter">
+        <SetupDB
+          onSetupComplete={goToLogin}
+          onGoToLogin={goToLogin}
+        />
+      </div>
     );
   }
 
-  // По дефолту показываем логин
   return (
-    <Login 
-      onLogin={handleLogin} 
-      onGoToSetup={() => setAuthScreen('setup')} 
-    />
+    <div key="login" className="page-transition-enter">
+      <Login
+        onLogin={handleLogin}
+        onGoToSetup={goToSetup}
+      />
+    </div>
   );
 }
 

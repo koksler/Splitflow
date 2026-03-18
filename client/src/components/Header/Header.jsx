@@ -2,44 +2,46 @@ import React, { useState } from 'react';
 import {
   LogOut,
   LayoutDashboard,
-  Package,
-  Users,
-  Filter,
+  PackageCheck,
+  FileUser,
   ChevronDown,
-  Amphora
+  Bolt 
 } from 'lucide-react';
 import './Header.css';
-import '../Buttons/Button.css'
+import Button from '../Buttons/Button'
 import { PROJECTS } from '../../constants.js';
 
-const Header = ({ user, onLogout, activeTab, setActiveTab, currentProject, setCurrentProject }) => {
+const Header = ({ user, activeTab, onTabChange, onLogout, currentProject, setCurrentProject }) => {
   const [isProjectMenuOpen, setMenuOpen] = useState(false);
-  // Получаем конфиг текущего выбранного проекта
+
   const projectKey = currentProject ? currentProject.toUpperCase() : 'ALL';
   const activeProjConfig = PROJECTS[projectKey] || PROJECTS.ALL;
-  const ActiveIcon = activeProjConfig.icon;
+  const ActiveIcon = activeProjConfig?.icon || PackageCheck;
 
   const handleProjectSelect = (projKey) => {
     setCurrentProject(PROJECTS[projKey].id);
     setMenuOpen(false);
   };
 
-
   const avatarUrl = (user?.avatar || user?.Avatar)
     ? `/avatars/${user.avatar || user.Avatar}`
     : '/avatars/default.jpg';
-  console.log(user.Avatar);
 
   return (
-    <div className="header-container">
+    <div className="header-wrapper">
 
-      {/* 1. ОСТРОВ ПРОФИЛЯ */}
-      <div className="island profile-island">
-        <div className="avatar-wrapper">
+      {/* 1. ОСТРОВ ПРОФИЛЯ (Левый) - 278px */}
+      <div className="header-island left-island">
+        {/* TODO: Заменить на динамическое лого БД, когда добавим в бэкенд */}
+        <div className="db-logo-box">
+          <img src="/logo-visk.png" alt="DB" className="db-logo-img" />
+        </div>
+
+        <div className="avatar-box">
           <img src={avatarUrl} alt="Avatar" className="avatar-img" />
         </div>
+
         <div className="profile-info">
-          {/* Обрезаем имя, если слишком длинное, или берем из пропсов */}
           <span className="profile-name">
             {user?.name || "Al. Vorontsova"}
           </span>
@@ -47,102 +49,83 @@ const Header = ({ user, onLogout, activeTab, setActiveTab, currentProject, setCu
             {user?.position || "Член Комитета"}
           </span>
         </div>
-        <button className="btn-icon btn" onClick={onLogout}>
-          <LogOut size={20} />
-        </button>
+
+        <Button variant="icon" onClick={onLogout} title="Выйти">
+          <LogOut size={24} />
+        </Button>
       </div>
 
-      {/* 2. ОСТРОВ НАВИГАЦИИ */}
-      <div className="island nav-island">
-
+      {/* 2. ОСТРОВ НАВИГАЦИИ (Центр) - 398px */}
+      <div className="header-island center-island">
         <button
-          className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
-          onClick={() => setActiveTab('dashboard')}
+          className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
+          onClick={() => onTabChange('analytics')}
         >
-          <LayoutDashboard />
-          <span>Дэшборд</span>
+          <LayoutDashboard size={24} />
+          <span>Аналитика</span>
         </button>
 
         <button
-          className={`nav-item ${activeTab === 'tasks' ? 'active' : ''}`}
-          onClick={() => setActiveTab('tasks')}
+          className={`nav-item ${activeTab === 'kanban' ? 'active' : ''}`}
+          onClick={() => onTabChange('kanban')}
         >
-          <Package />
+          <PackageCheck size={24} />
           <span>Задачи</span>
         </button>
 
         <button
           className={`nav-item ${activeTab === 'employees' ? 'active' : ''}`}
-          onClick={() => setActiveTab('employees')}
+          onClick={() => onTabChange('employees')}
         >
-          <Users />
+          <FileUser size={24} />
           <span>Сотрудники</span>
         </button>
-
       </div>
 
-      <div className="island project-island" style={{ position: 'relative' }}>
-
+      {/* 3. ОСТРОВ ПРОЕКТОВ (Правый) - 278px */}
+      <div className="header-island right-island">
+        
         <div className="project-selector" onClick={() => setMenuOpen(!isProjectMenuOpen)}>
-          <div className="project-icon-box" style={{ backgroundColor: activeProjConfig.color }}>
-            <ActiveIcon size={20} />
+          <div className="project-icon-box" style={{ backgroundColor: activeProjConfig?.color || '#7F7C8D' }}>
+            <ActiveIcon size={24} color="white" />
           </div>
+          
           <div className="project-text-box">
             <span className="project-label">Текущий проект</span>
-            <span className="project-name">{activeProjConfig.label}</span>
+            <span className="project-name">{activeProjConfig?.label || 'ВСЕ ПРОЕКТЫ'}</span>
           </div>
-          <ChevronDown size={16} color="#7F7C8D" />
+          
+          <ChevronDown size={24} color="#7F7C8D" style={{ marginLeft: 'auto', marginRight: '5px' }} />
         </div>
+
+        {/* Кнопка настроек вместо рамки у селектора */}
+        <Button variant="icon" title="Настройки" onClick={() => console.log('Settings')}>
+          <Bolt size={24} />
+        </Button>
 
         {/* DROPDOWN MENU */}
         {isProjectMenuOpen && (
-          <div style={{
-            position: 'absolute',
-            top: '80px',
-            right: '0',
-            background: 'white',
-            borderRadius: '16px',
-            padding: '10px',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-            zIndex: 1000,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '5px',
-            width: '240px'
-          }}>
+          <div className="project-dropdown">
             {Object.keys(PROJECTS).map(key => {
               const proj = PROJECTS[key];
               const Icon = proj.icon;
               return (
                 <div
                   key={key}
+                  className={`dropdown-item ${currentProject === proj.id ? 'active' : ''}`}
                   onClick={() => handleProjectSelect(key)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '10px',
-                    cursor: 'pointer',
-                    borderRadius: '10px',
-                    background: currentProject === proj.id ? '#EEEFF4' : 'transparent'
-                  }}
                 >
-                  <div style={{
-                    width: '30px', height: '30px',
-                    background: proj.color,
-                    borderRadius: '8px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white'
-                  }}>
-                    <Icon size={16} />
+                  <div className="dropdown-icon" style={{ backgroundColor: proj.color }}>
+                    <Icon size={24} />
                   </div>
-                  <span style={{ fontWeight: 600, fontSize: '14px' }}>{proj.label}</span>
+                  <span className="dropdown-text">{proj.label}</span>
                 </div>
               )
             })}
           </div>
         )}
-
       </div>
+
     </div>
   );
 };
