@@ -12,8 +12,11 @@ public class TaskItem
     public string Project { get; set; } = "nasledie";
     public string Deadline { get; set; } = string.Empty;
     
-    public int AssigneeId { get; set; }
-    public string AssigneeAvatar { get; set; } = "default.jpg"; 
+    public int? AssigneeId { get; set; }
+    public Employee? Assignee { get; set; }
+
+    public int SupervisorId { get; set; }
+    public Employee Supervisor { get; set; } 
     
     public string SupervisorAvatar { get; set; } = "default.jpg"; // Аватарка того, кто создал
 }
