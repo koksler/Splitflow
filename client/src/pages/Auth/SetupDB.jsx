@@ -42,7 +42,7 @@ const SetupDB = ({ onSetupComplete, onGoToLogin }) => {
 
     return (
         <div className="setup-page">
-            <img src="/setup-bg.png" alt="Background Blur" className="setup-bg-image" />
+            <img src="/setup-bg.webp" alt="Background Blur" className="setup-bg-image" />
 
             <div className="setup-content">
                 <h1 className="setup-title">
