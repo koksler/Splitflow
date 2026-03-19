@@ -55,6 +55,11 @@
   border: 2px solid var(--color-green);
 }
 
+.status-dot-backlog {
+  background-color: rgba(196, 196, 196, 0.5);
+  border: 2px dashed var(--color-text-gray);
+}
+
 /* --- Date Badge --- */
 .date-badge {
   gap: 5px;
