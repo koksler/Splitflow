@@ -16,5 +16,5 @@ public class Employee
     public string? Avatar { get; set; } 
 
     [JsonIgnore] 
-    public string Password { get; set; } = string.Empty; 
+    public string PasswordHash { get; set; } = string.Empty; 
 }

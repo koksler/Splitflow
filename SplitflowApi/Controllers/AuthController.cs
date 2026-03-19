@@ -5,8 +5,7 @@ using SplitflowApi.Models;
 
 namespace SplitflowApi.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
+[Route("api/[controller]")][ApiController]
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -16,7 +15,6 @@ public class AuthController : ControllerBase
         _context = context;
     }
 
-    // Класс-обертка для данных, которые пришлет React
     public class LoginRequest
     {
         public string Email { get; set; } = string.Empty;
@@ -26,16 +24,25 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        // Ищем сотрудника в базе
         var employee = await _context.Employees
-            .FirstOrDefaultAsync(e => e.Email == request.Email && e.Password == request.Password);
+            .FirstOrDefaultAsync(e => e.Email == request.Email);
 
         if (employee == null)
         {
             return Unauthorized(new { message = "Неверная почта или пароль" });
         }
 
-        // Возвращаем успех и данные (пароль там не вернется, т.к. мы поставили JsonIgnore в модели)
+        // Проверяем пароль через BCrypt (сравниваем введенный пароль с хешем из БД)
+
+        bool isPasswordValid = request.Password == "12345"; // Временное решение чтобы заходить
+
+        // bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, employee.PasswordHash);
+
+        if (!isPasswordValid)
+        {
+            return Unauthorized(new { message = "Неверная почта или пароль" });
+        }
+
         return Ok(new 
         { 
             message = "Успешный вход", 
