@@ -18,7 +18,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-work);
     overflow: hidden;
     padding: 0 5vw;
   }

@@ -34,7 +34,7 @@ const Header = ({ user, activeTab, onTabChange, onLogout, currentProject, setCur
       <div className="header-island left-island">
         {/* TODO: Заменить на динамическое лого БД, когда добавим в бэкенд */}
         <div className="db-logo-box">
-          <img src="/logo-visk.png" alt="DB" className="db-logo-img" />
+          <img src="/visk-proj.png" alt="DB" className="db-logo-img" />
         </div>
 
         <div className="avatar-box">

@@ -18,8 +18,27 @@ function App() {
   const [authScreen, setAuthScreen] = useState(null);
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('analytics'); 
+  const [employeesMap, setEmployeesMap] = useState({});
 
   const[currentProject, setCurrentProject] = useState(PROJECTS?.ALL?.id || 'ALL');
+
+  const fetchEmployees = async () => {
+    try {
+      const res = await fetch("http://localhost:5268/api/employees");
+      if (res.ok) {
+        const data = await res.json();
+        // Превращаем массив в объект: { 1: {name: '...', avatar: '...'}, 2: {...} }
+        const map = data.reduce((acc, emp) => {
+          acc[emp.id] = emp;
+          return acc;
+        }, {});
+        setEmployeesMap(map);
+      }
+    } catch (err) {
+      console.error("Ошибка загрузки сотрудников:", err);
+    }
+  };
+
 
   // Инициализация
   useEffect(() => {
@@ -34,6 +53,12 @@ function App() {
     };
     checkInitialStatus();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchEmployees();
+    }
+  }, [user]);
 
   const handleLogin = async (email, password) => {
     try {
@@ -66,10 +91,10 @@ function App() {
 
   const renderMainContent = () => {
     switch (activeTab) {
-      case 'analytics': return <Dashboard />;
-      case 'kanban': return <KanbanBoard currentProject={currentProject}/>;
-      case 'employees': return <EmployeesTable />;
-      default: return <Dashboard />;
+      case 'analytics': return <Dashboard employeesMap={employeesMap}/>;
+      case 'kanban': return <KanbanBoard currentProject={currentProject} employeesMap={employeesMap}/>;
+      case 'employees': return <EmployeesTable employees={Object.values(employeesMap)}/>;
+      default: return <Dashboard employeesMap={employeesMap}/>;
     }
   };
 

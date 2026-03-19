@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListFilter } from 'lucide-react';
+import { TextSearch } from 'lucide-react';
 import './Inputs.css';
 
 /**
@@ -28,7 +28,7 @@ const Input = ({
         <div className="input-wrapper" style={style}>
             {isSearch && (
                 <span className="input-icon">
-                    <ListFilter size={18} />
+                    <TextSearch size={24} />
                 </span>
             )}
             <input
