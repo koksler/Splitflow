@@ -30,7 +30,6 @@
   --icon-radius: 5px;
   --radius-card-task: 15px;
 
-  /* Тень для карточки: Y:15, Blur:25, Color 1D1D1D (5%) */
   --shadow-card: 0px 15px 25px rgba(29, 29, 29, 0.05);
 }
 

@@ -1,62 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import { PROJECTS } from '../../constants';
 import SubHeader from '../../components/SubHeader/SubHeader';
 import './Dashboard.css';
 
-const Dashboard = ({ employeesMap }) => {
-  const [stats, setStats] = useState({
-    totalEmployees: 0,
-    totalTasks: 0,
-    activeTasks: 0,
-    projects: {}, 
-    recentTasks:[]
-  });
+const Dashboard = ({ tasks, employeesMap }) => {
+  
+  const stats = useMemo(() => {
+    const totalEmployees = Object.keys(employeesMap).length;
+    const totalTasks = tasks.length;
+    const activeTasks = tasks.filter(t => t.status.toLowerCase() !== 'done').length;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [empRes, tasksRes] = await Promise.all([
-          fetch("http://localhost:5268/api/employees"),
-          fetch("http://localhost:5268/api/tasks")
-        ]);
+    const counts = { nasledie: 0, korona: 0, budget: 0, napadenie: 0, zashita: 0 };
+    tasks.forEach(t => {
+      if (counts[t.project] !== undefined) counts[t.project]++;
+      else counts['nasledie']++;
+    });
 
-        const employees = await empRes.json();
-        const rawTasks = await tasksRes.json();
+    const recent = [...tasks].reverse().slice(0, 5);
 
-        const tasks = rawTasks.map(t => {
-            let p = t.project ? t.project.toLowerCase() : 'nasledie';
-            if (p === 'defense') p = 'zashita';
-            if (p === 'economy') p = 'budget';
-            return { ...t, project: p };
-        });
-
-        const totalEmployees = employees.length;
-        const totalTasks = tasks.length;
-        const activeTasks = tasks.filter(t => t.status.toLowerCase() !== 'done').length;
-
-        const counts = { nasledie: 0, korona: 0, budget: 0, napadenie: 0, zashita: 0 };
-        tasks.forEach(t => {
-          if (counts[t.project] !== undefined) counts[t.project]++;
-          else counts['nasledie']++;
-        });
-
-        const recent = [...tasks].reverse().slice(0, 5);
-
-        setStats({
-          totalEmployees,
-          totalTasks,
-          activeTasks,
-          projects: counts,
-          recentTasks: recent
-        });
-
-      } catch (error) {
-        console.error("Ошибка дэшборда:", error);
-      }
-    };
-    fetchData();
-  },[]);
+    return { totalEmployees, totalTasks, activeTasks, projects: counts, recentTasks: recent };
+  }, [tasks, employeesMap]);
 
   const projectDisplayList = Object.values(PROJECTS)
     .filter(p => p.id !== 'all')
