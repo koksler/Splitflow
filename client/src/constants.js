@@ -45,9 +45,7 @@ export const getPriorityColor = (p) => {
   const priority = p ? p.toLowerCase() : 'green';
   switch (priority) {
     case 'red': return 'var(--color-red, #FF5656)';       // High
-    case 'orange': return 'var(--color-orange, #F97316)'; // Скриншот БД
     case 'yellow': return 'var(--color-yellow, #FBBF24)'; // Medium
-    case 'blue': return 'var(--color-blue, #3B82F6)';     // Скриншот БД
     case 'green': return 'var(--color-green, #10B981)';   // Low
     default: return 'var(--color-green, #10B981)';
   }
@@ -55,10 +53,16 @@ export const getPriorityColor = (p) => {
 
 // Безопасная функция для получения проекта по ID (для TaskCard)
 export const getProjectInfo = (projId) => {
-  if (!projId) return PROJECTS.NASLEDIE;
+  const raw = projId ? projId.toLowerCase() : 'nasledie';
   
-  // Ищем ключ (например, "KORONA") по id ("korona")
-  const key = Object.keys(PROJECTS).find(k => PROJECTS[k].id === projId.toLowerCase());
+  // Маппинг: превращаем серверные "defense" в наши "zashita" и т.д.
+  let id = raw;
+  if (raw === 'defense') id = 'zashita';
+  if (raw === 'economy') id = 'budget';
   
-  return PROJECTS[key] || PROJECTS.NASLEDIE; // Если пришел мусор, возвращаем Наследие по дефолту
+  // Ищем в объекте PROJECTS
+  const project = Object.values(PROJECTS).find(p => p.id === id);
+  
+  // Если не нашли (например, пришел мусор), возвращаем Наследие
+  return project || PROJECTS.NASLEDIE;
 };

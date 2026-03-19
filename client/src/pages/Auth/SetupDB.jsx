@@ -8,7 +8,6 @@ const SetupDB = ({ onSetupComplete, onGoToLogin }) => {
     const[dbPassword, setDbPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    // Заготовка под будущее внедрение логики API
     const handleConnect = async () => {
         if (!dbString || !dbPassword) {
             alert("Пожалуйста, заполните все поля.");
@@ -17,19 +16,29 @@ const SetupDB = ({ onSetupComplete, onGoToLogin }) => {
 
         setIsLoading(true);
         try {
-            // TODO: Здесь будет fetch запрос к /api/setup/init
-            // const response = await fetch('...', { ... });
-            
-            console.log("Пытаемся подключиться с:", { dbString, dbPassword });
-            
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            alert("База данных успешно инициализирована!");
-            if (onSetupComplete) onSetupComplete();
+            const response = await fetch('http://localhost:5268/api/setup/init', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    connectionString: dbString, // Например: Host=localhost;Port=5432;Database=splitflow_v2;Username=postgres
+                    password: dbPassword
+                })
+            });
 
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("База данных успешно создана и инициализирована!");
+                if (onSetupComplete) onSetupComplete();
+            } else {
+                // Сервер вернул ошибку (например, неверный пароль)
+                alert("Ошибка: " + data.message);
+            }
         } catch (error) {
             console.error("Ошибка подключения:", error);
-            alert("Не удалось подключиться к БД. Проверьте данные.");
+            alert("Не удалось связаться с сервером бэкенда.");
         } finally {
             setIsLoading(false);
         }
