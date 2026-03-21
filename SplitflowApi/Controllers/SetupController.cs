@@ -82,4 +82,6 @@ public class SetupController : ControllerBase
             return BadRequest(new { message = $"Ошибка подключения: {ex.Message}" });
         }
     }
+
+    
 }

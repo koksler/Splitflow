@@ -32,11 +32,10 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = "Неверная почта или пароль" });
         }
 
-        // Проверяем пароль через BCrypt (сравниваем введенный пароль с хешем из БД)
 
-        bool isPasswordValid = request.Password == "12345"; // Временное решение чтобы заходить
+        // bool isPasswordValid = request.Password == "12345"; // Временное решение чтобы заходить
 
-        // bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, employee.PasswordHash);
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, employee.PasswordHash);
 
         if (!isPasswordValid)
         {
