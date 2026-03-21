@@ -1,0 +1,97 @@
+/* EmployeesTable.css */
+
+.employees-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  width: 100%;
+}
+
+.table-container {
+  flex-grow: 1;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-stroke, #E5E7EB);
+  border-radius: var(--radius-card, 10px);
+  overflow: auto;
+}
+
+.linear-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 1000px;
+}
+
+/* ХЕДЕР ТАБЛИЦЫ */
+.linear-table th {
+  position: sticky;
+  top: 0;
+  background-color: #F3F4F6;
+  color: var(--color-text, #111827);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--color-stroke, #E5E7EB);
+  z-index: 10;
+}
+
+.linear-table td {
+  padding: 14px 12px;
+  font-size: 14px;
+  color: var(--color-text, #111827);
+  border-bottom: 1px solid var(--color-stroke, #E5E7EB);
+  vertical-align: middle;
+}
+
+.linear-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.linear-table tbody tr {
+  transition: background-color 0.1s ease;
+}
+
+.linear-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.cell-primary {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cell-secondary {
+  color: var(--color-text-gray, #6B7280);
+}
+
+.cell-center {
+  text-align: center;
+}
+
+.cell-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: var(--color-text-gray, #6B7280);
+}
+
+.kpi-badge {
+  font-weight: 700;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums; 
+}
+
+.cell-truncate {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell-empty {
+  text-align: center;
+  padding: 40px !important;
+  color: var(--color-text-gray, #6B7280);
+  font-size: 14px;
+}

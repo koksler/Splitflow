@@ -6,7 +6,7 @@ import './Button.css';
  *   "primary" — full-width tall button (login, save, etc.)
  *   "icon"    — 50×50 square icon button (logout, add, etc.)
  */
-const Button = ({ variant = 'primary', onClick, children, style, disabled }) => {
+const Button = ({ variant = 'primary', onClick, children, style, disabled, title}) => {
     let className = '';
 
     switch (variant) {
@@ -30,6 +30,7 @@ const Button = ({ variant = 'primary', onClick, children, style, disabled }) => 
             onClick={onClick}
             style={style}
             disabled={disabled}
+            title={title}
         >
             {children}
         </button>

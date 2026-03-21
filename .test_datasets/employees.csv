@@ -1,0 +1,51 @@
+Name,Email,Position,Specialization,Department,ClearanceLevel,ContractType,Kpi,Avatar,Password
+Алишия Воронцова,admin@splitflow.anc,Глава Отделения,Административный Контроль,ГОС Ыкавыка,5,Бессрочный,A+,alishia.png,foxqueen_1
+Даниил Керезников,d.kereznikov@splitflow.anc,Специалист IV,Архивация Кода,ГОС Ыкавыка,4,Бессрочный,A+,danya.png,rtx3090_god
+Павел Никонов,p.nikonov@splitflow.anc,Командир Отряда,Тактика,ГОС Ыкавыка,4,Бессрочный,A,pavel.png,strategy_king
+Грегор Вейждебрук,g.vejdebruk@splitflow.anc,Штурмовик,Тяжелое Вооружение,ГОС Ыкавыка,3,Бессрочный,A-,gregor.png,gymrat123
+Тимофея Средьрякова,t.sredryakova@splitflow.anc,Разведчик,CQB,ГОС Ыкавыка,3,Бессрочный,A,timosha.png,marshmallow_blood
+Александра Сребрянова,a.srebryanova@splitflow.anc,Полевой Медик,Полевая Хирургия,ГОС Ыкавыка,3,Бессрочный,A+,sasha.png,healbot_pro
+Анна Керезникова,a.kereznikova@splitflow.anc,Политик,Лоббирование,Королевский Совет,5,Бессрочный,A,anya.png,powerplay99
+Эксрелемма,exrelemma@splitflow.anc,Советница Короля,Внутренняя Политика,Королевский Совет,5,Бессрочный,A+,exrelemma.png,twilight_shadow
+Каэлен Моргентау,k.morgentau@splitflow.anc,Великий Инквизитор,Теология,Инквизиториум,5,Бессрочный,A,kaelen.png,holy_Y_purge
+Илариэль Вэйн,i.vayn@splitflow.anc,Капитан,Внутренняя Безопасность,СВП Ночной Дозор,4,Бессрочный,A+,vayn.png,icequeen_secure
+Лидия Орлова,l.orlova@splitflow.anc,Прецептор,Кураториум Ересей,Инквизиториум,4,Бессрочный,B+,orlova.png,burn_heretics
+Курт Штайнер,k.shtayner@splitflow.anc,Майор,Штурмовые Операции,СОР Эшмейнеры,4,Бессрочный,A-,shtayner.png,ogre_r7_heavy
+Арсений Филин,a.filin@splitflow.anc,Старший Доктор,Психо-аномальная Реабилитация,ПМК Кэйртейкеры,4,Бессрочный,B+,filin.png,coffee_and_cigs
+Лана Волнорезова,l.volnorezova@splitflow.anc,Оперативник-амфибия,Морской Штурм,МРК Пастыри,3,Бессрочный,A,lana.png,ocean_strike1
+Лео Волнорезов,leo.volnorezov@splitflow.anc,Оперативник-амфибия,Подводный Саботаж,МРК Пастыри,3,Бессрочный,A,leo.png,ocean_strike2
+Зоя Кузнецова,z.kuznetsova@splitflow.anc,Пилот,Эвакуация,Транспортный Корпус,3,Бессрочный,A,zoya.png,heli_tom_boy
+Эвелина фон Штернберг,e.sternberg@splitflow.anc,Консультант,Био-регенерация,Медицинский Отдел,4,Проектный,A,evelina.png,blood_wine_99
+Вейла,veyla@splitflow.anc,Телохранитель,Ближний Бой,Королевская Гвардия,4,Срочный,A,veyla.png,twin_blades
+Виктор Штейн,v.stein@splitflow.anc,Руководитель Отдела,Исследование Аномалий,Сектор 4 ВИСК,4,Бессрочный,A,stein.png,science_first
+Илларион Воронцов,i.vorontsov@razirtech.anc,Патриарх,ВПК,RAZIRTECH,5,Бессрочный,A+,illarion.png,patriarch_boss
+Спирос,spiros@splitflow.anc,Контрактор,Общепит,Инфраструктура Окхиро,2,Проектный,A+,spiros.png,gyros_master
+Михаил Соколов,m.sokolov@splitflow.anc,Аналитик,Разведка,СВП Ночной Дозор,3,Бессрочный,B+,m_sokolov.png,intel_gather
+Елена Смирнова,e.smirnova@splitflow.anc,Лаборант,Химический Анализ,Сектор 4 ВИСК,2,Срочный,B,e_smirnova.png,chem_lab_test
+Дмитрий Волков,d.volkov@splitflow.anc,Снайпер,Поддержка,СОР Эшмейнеры,3,Бессрочный,A-,d_volkov.png,sniper_wolf
+Ольга Лебедева,o.lebedeva@splitflow.anc,Архивариус,Хранение Артефактов,ГОС Ыкавыка,3,Бессрочный,B,o_lebedeva.png,archive99
+Артур Кросс,a.cross@splitflow.anc,Инквизитор,Допрос,Инквизиториум,3,Бессрочный,C,a_cross.png,fire_purges
+Марина Коваль,m.koval@splitflow.anc,Инженер-программист,Кибербезопасность,RAZIRTECH,3,Проектный,B+,m_koval.png,code_red_00
+Илья Морозов,i.morozov@splitflow.anc,Техник,Обслуживание Дронов,ГОС Ыкавыка,2,Срочный,B,i_morozov.png,drone_fixer
+София Громова,s.gromova@splitflow.anc,Оперативник,Внедрение,СВП Ночной Дозор,3,Бессрочный,A-,s_gromova.png,shadow_step
+Роман Чернов,r.chernov@splitflow.anc,Парамедик,Полевая Помощь,ПМК Кэйртейкеры,2,Бессрочный,B,r_chernov.png,med_kit_go
+Виктория Ланская,v.lanskaya@splitflow.anc,Исследователь,Артефакты Первой Цивилизации,Сектор 4 ВИСК,3,Проектный,A,v_lanskaya.png,ancient_tech
+Антон Зайцев,a.zaytsev@splitflow.anc,Штурмовик,Прорыв,СОР Эшмейнеры,2,Срочный,C,a_zaytsev.png,breach_clear
+Ксения Орхид,k.orchid@splitflow.anc,Агент,Скрытое Наблюдение,СВП Ночной Дозор,3,Бессрочный,A,k_orchid.png,unseen_eye
+Петр Ильин,p.ilyin@splitflow.anc,Водолаз,Глубоководный Поиск,МРК Пастыри,2,Бессрочный,B+,p_ilyin.png,deep_dive_77
+Анастасия Белова,a.belova@splitflow.anc,Психолог,Реабилитация,ПМК Кэйртейкеры,3,Бессрочный,A-,a_belova.png,mind_healer
+Вадим Тарасов,v.tarasov@splitflow.anc,Логист,Поставки Вооружения,Инфраструктура Окхиро,2,Бессрочный,B,v_tarasov.png,supply_chain
+Екатерина Новикова,e.novikova@splitflow.anc,Криптограф,Дешифровка,ГОС Ыкавыка,3,Срочный,A,e_novikova.png,crypto_key_x
+Станислав Юдин,s.yudin@splitflow.anc,Инструктор,Тактика CQB,СОР Эшмейнеры,4,Бессрочный,A,s_yudin.png,train_hard_die_less
+Мария Романова,m.romanova@splitflow.anc,Хирург,Экстренные Операции,ПМК Кэйртейкеры,3,Бессрочный,A+,m_romanova.png,scalpel_pro
+Глеб Макаров,g.makarov@splitflow.anc,Техник-оружейник,Модификация Оружия,RAZIRTECH,3,Бессрочный,B+,g_makarov.png,gun_mod_expert
+Дарья Титова,d.titova@splitflow.anc,Аколитка,Ритуальное Очищение,Инквизиториум,2,Срочный,B,d_titova.png,holy_flame_9
+Олег Федоров,o.fedorov@splitflow.anc,Пилот,Переброска Грузов,Транспортный Корпус,2,Бессрочный,C,o_fedorov.png,fly_boy_sky
+Надежда Крылова,n.krylova@splitflow.anc,Аналитик,Обработка Данных,СВП Ночной Дозор,3,Проектный,B+,n_krylova.png,data_miner_x
+Руслан Богданов,r.bogdanov@splitflow.anc,Инженер-конструктор,Броня,RAZIRTECH,4,Бессрочный,A,r_bogdanov.png,armor_up_now
+Алина Жукова,a.zhukova@splitflow.anc,Оператор Связи,Координация,ГОС Ыкавыка,2,Срочный,B,a_zhukova.png,comms_link_on
+Денис Мельников,d.melnikov@splitflow.anc,Подрывник,Взрывотехника,СОР Эшмейнеры,3,Бессрочный,B+,d_melnikov.png,boom_stick_c4
+Валерия Попова,v.popova@splitflow.anc,Биолог,Анализ Мутаций,Сектор 4 ВИСК,3,Бессрочный,A-,v_popova.png,dna_seq_run
+Тимур Сафин,t.safin@splitflow.anc,Навигатор,Подводное Ориентирование,МРК Пастыри,2,Срочный,B,t_safin.png,sonar_ping_0
+Яна Куликова,y.kulikova@splitflow.anc,Делопроизводитель,Внутренний Аудит,Королевский Совет,3,Бессрочный,C,y_kulikova.png,paper_work_hell
+Игорь Власов,i.vlasov@splitflow.anc,Следователь,Внутренние Расследования,СВП Ночной Дозор,3,Бессрочный,A-,i_vlasov.png,truth_seeker_1

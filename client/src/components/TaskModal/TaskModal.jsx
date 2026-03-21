@@ -1,147 +1,204 @@
 import React, { useState, useEffect } from 'react';
-import '../../pages/Auth/Auth.css';
-import '../Inputs/Inputs.css';
-import '../Buttons/Button.css';
+import { X, Trash2 } from 'lucide-react';
+import Button from '../Buttons/Button';
+import Input from '../Inputs/Inputs';
+import { PROJECTS } from '../../constants';
+import './TaskModal.css';
 
-const TaskModal = ({ isOpen, onClose, onSave, initialStatus, currentProject, currentUser }) => {
-
-  const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("green");
-  const [project, setProject] = useState("nasledie");
-  const [deadline, setDeadline] = useState("14.06.2025");
-
-  const [assigneeId, setAssigneeId] = useState("");
+const TaskModal = ({ 
+  isOpen, 
+  onClose, 
+  onSave, 
+  onDelete, 
+  task,
+  initialStatus,
+  employeesMap,
+  currentUser
+}) => {
+  
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    status: 'todo',
+    priority: 'green',
+    project: 'nasledie',
+    deadline: '',
+    assigneeId: '',
+    supervisorId: ''
+  });
 
   useEffect(() => {
     if (isOpen) {
-      setTitle("");
-      setPriority("green");
-      setDeadline("14.06.2025");
-      setAssigneeId(""); // Сбрасываем ID
-
-      if (currentProject && currentProject !== 'all') {
-        setProject(currentProject);
+      if (task) {
+        setFormData({
+          title: task.title || '',
+          description: task.description || '',
+          status: task.status || 'todo',
+          priority: task.priority || 'green',
+          project: task.project || 'nasledie',
+          deadline: task.deadline ? task.deadline.split('T')[0] : '',
+          assigneeId: task.assigneeId || '',
+          supervisorId: task.supervisorId || ''
+        });
       } else {
-        setProject('nasledie');
+        setFormData({
+          title: '',
+          description: '',
+          status: initialStatus || 'todo',
+          priority: 'green',
+          project: 'nasledie',
+          deadline: '',
+          assigneeId: '',
+          supervisorId: currentUser?.id || ''
+        });
       }
     }
-  }, [isOpen, currentProject]);
+  },[isOpen, task, initialStatus, currentUser]);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
-    if (!title.trim()) {
-      alert("Пожалуйста, введите название задачи");
+  const handleSubmit = () => {
+    if (!formData.title.trim()) {
+      alert("Укажите название задачи");
       return;
     }
-
-    const newTask = {
-      title: title,
-      priority: priority,
-      project: project,
-      status: initialStatus,
-      deadline: deadline,
-
-      assigneeId: parseInt(assigneeId) || 0,
-
-      supervisorAvatar: currentUser?.avatar || currentUser?.Avatar || "default.jpg"
+    
+    const taskDataToSave = {
+      ...formData,
+      assigneeId: formData.assigneeId ? parseInt(formData.assigneeId) : null,
+      supervisorId: formData.supervisorId ? parseInt(formData.supervisorId) : null,
+      deadline: formData.deadline ? new Date(formData.deadline).toISOString() : null
     };
 
-    onSave(newTask);
-    onClose();
+    onSave(taskDataToSave, task?.id);
   };
+
+  const employeesList = Object.values(employeesMap || {});
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div
-        className="auth-card modal-content"
-        onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: '500px', width: '100%', padding: '40px' }}
-      >
-        <h2 style={{ fontSize: '24px', marginBottom: '20px', fontFamily: 'Onest, sans-serif' }}>
-          Новая задача
-        </h2>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-
-          <div className="input-wrapper">
-            <input
-              className="custom-input"
-              placeholder="Название задачи"
-              value={title}
-              autoFocus
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-
-          {/* ID Исполнителя */}
-          <div className="input-wrapper">
-            <input
-              className="custom-input"
-              type="number"
-              placeholder="ID Исполнителя (например: 1)"
-              value={assigneeId}
-              onChange={(e) => setAssigneeId(e.target.value)}
-            />
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <div className="input-wrapper">
-              <select
-                className="custom-input"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-              >
-                <option value="green">Низкий</option>
-                <option value="yellow">Средний</option>
-                <option value="red">Высокий</option>
-              </select>
-            </div>
-
-            <div className="input-wrapper">
-              <select
-                className="custom-input"
-                value={project}
-                onChange={(e) => setProject(e.target.value)}
-                disabled={currentProject !== 'all'}
-              >
-                <option value="nasledie">Наследие</option>
-                <option value="economy">Экономика</option>
-                <option value="defense">Защита</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="input-wrapper">
-            <input
-              className="custom-input"
-              placeholder="Срок сдачи"
-              value={deadline}
-              onChange={(e) => setDeadline(e.target.value)}
-            />
-          </div>
-
+      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+        
+        {/* ХЕДЕР МОДАЛКИ */}
+        <div className="modal-header">
+          <h2 className="modal-title">
+            {task ? `Редактирование: ${task.displayId}` : 'Новая задача'}
+          </h2>
+          <Button variant="icon" onClick={onClose} title="Закрыть">
+            <X size={24} />
+          </Button>
         </div>
 
-        <div className="auth-divider" style={{ margin: '24px 0' }}></div>
+        {/* ТЕЛО МОДАЛКИ */}
+        <div className="modal-body">
+          
+          <div className="form-group full-width">
+            <label>Название задачи *</label>
+            <Input 
+              name="title" 
+              value={formData.title} 
+              onChange={handleChange} 
+              placeholder="Введите название..." 
+              autoFocus
+              className="modal-custom-input"
+            />
+          </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button
-            className="btn btn-primary"
-            style={{ backgroundColor: 'var(--color-bg-work)', color: 'var(--color-text)', flex: 1 }}
-            onClick={onClose}
-          >
-            Отмена
-          </button>
-          <button
-            className="btn btn-primary"
-            style={{ flex: 2 }}
-            onClick={handleSubmit}
-          >
-            Создать
-          </button>
+          <div className="form-group full-width">
+            <label>Описание</label>
+            <textarea 
+              className="modal-textarea"
+              name="description" 
+              value={formData.description} 
+              onChange={handleChange} 
+              placeholder="Детальное описание..."
+            />
+          </div>
+
+          {/* СЕТКА НАСТРОЕК */}
+          <div className="modal-grid">
+            
+            <div className="form-group">
+              <label>Проект</label>
+              <select className="modal-select" name="project" value={formData.project} onChange={handleChange}>
+                {Object.values(PROJECTS).filter(p => p.id !== 'all').map(p => (
+                  <option key={p.id} value={p.id}>{p.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Статус</label>
+              <select className="modal-select" name="status" value={formData.status} onChange={handleChange}>
+                <option value="backlog">Backlog</option>
+                <option value="todo">To Do</option>
+                <option value="progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Приоритет</label>
+              <select className="modal-select" name="priority" value={formData.priority} onChange={handleChange}>
+                <option value="red">Высокий (Red)</option>
+                <option value="yellow">Средний (Yellow)</option>
+                <option value="green">Низкий (Green)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Дедлайн</label>
+              <Input 
+                type="date" 
+                name="deadline" 
+                value={formData.deadline} 
+                onChange={handleChange} 
+                className="modal-custom-input modal-date-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Исполнитель</label>
+              <select className="modal-select" name="assigneeId" value={formData.assigneeId} onChange={handleChange}>
+                <option value="">-- Не назначен --</option>
+                {employeesList.map(emp => (
+                  <option key={emp.id} value={emp.id}>{emp.name} ({emp.position})</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Постановщик</label>
+              <select className="modal-select" name="supervisorId" value={formData.supervisorId} onChange={handleChange}>
+                <option value="">-- Не назначен --</option>
+                {employeesList.map(emp => (
+                  <option key={emp.id} value={emp.id}>{emp.name}</option>
+                ))}
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ПОДВАЛ МОДАЛКИ */}
+        <div className="modal-footer">
+          {task ? (
+             <Button variant="icon" onClick={() => onDelete(task.id)} title="Удалить задачу" style={{ color: 'var(--color-red)' }}>
+               <Trash2 size={24} />
+             </Button>
+          ) : null}
+          
+          <div className="modal-actions-right">
+            <Button variant="full-unfocused" onClick={onClose}>Отмена</Button>
+            <Button variant="full" onClick={handleSubmit}>
+              {task ? 'Сохранить изменения' : 'Создать задачу'}
+            </Button>
+          </div>
         </div>
 
       </div>

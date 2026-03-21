@@ -10,10 +10,12 @@ public class TaskItem
     public string Status { get; set; } = "todo";
     public string Priority { get; set; } = "green";
     public string Project { get; set; } = "nasledie";
-    public string Deadline { get; set; } = string.Empty;
     
-    public int AssigneeId { get; set; }
-    public string AssigneeAvatar { get; set; } = "default.jpg"; 
+    public DateTime? Deadline { get; set; } 
     
-    public string SupervisorAvatar { get; set; } = "default.jpg"; // Аватарка того, кто создал
+    public int? AssigneeId { get; set; }
+    public Employee? Assignee { get; set; }
+    
+    public int? SupervisorId { get; set; }
+    public Employee? Supervisor { get; set; }
 }

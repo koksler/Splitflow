@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListFilter } from 'lucide-react';
+import { TextSearch } from 'lucide-react';
 import './Inputs.css';
 
 /**
@@ -14,24 +14,28 @@ const Input = ({
     placeholder,
     value,
     onChange,
+    name,
     style,
+    ...props
 }) => {
     const isSearch = variant === 'search' || variant === 'search-muted';
 
     const inputClass = [
         'custom-input',
         isSearch ? 'input-search' : '',
-        variant === 'search-muted',
+        variant === 'search-muted' ? 'input-search-muted' : '',
     ].filter(Boolean).join(' ');
 
     return (
         <div className="input-wrapper" style={style}>
             {isSearch && (
                 <span className="input-icon">
-                    <ListFilter size={18} />
+                    <TextSearch size={24} />
                 </span>
             )}
             <input
+                {...props}
+                name={name}
                 className={inputClass}
                 type={type}
                 placeholder={placeholder}

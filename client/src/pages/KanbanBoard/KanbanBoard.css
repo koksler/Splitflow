@@ -1,0 +1,103 @@
+.kanban-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.kanban-board {
+  display: flex;
+  gap: 15px;
+  height: calc(100vh - 160px); /* Вычитаем высоту хедера и сабхедера */
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 10px;
+}
+
+/* КОЛОНКА */
+.kanban-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  flex: 1;
+  transition: min-width 0.3s ease, max-width 0.3s ease;
+}
+
+.kanban-column.collapsed {
+  min-width: 100px;
+  max-width: 100px;
+}
+
+.kanban-column.collapsed .column-header-title,
+.kanban-column.collapsed .column-count,
+.kanban-column.collapsed .kanban-tasks {
+  display: none;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--radius-card, 10px);
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  gap: 10px;
+  height: 50px;
+}
+
+.column-header-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.column-count {
+  font-size: 16px;
+  color: var(--color-text-gray);
+  margin-left: 5px;
+  flex-grow: 1; 
+}
+
+.column-actions {
+  display: flex;
+  gap: 5px;
+}
+
+/* ЗОНА ЗАДАЧ */
+.kanban-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+  height: 100%;
+  padding-right: 5px;
+}
+
+.kanban-column > .column-header > .status-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot-backlog {
+  background-color: rgba(196, 196, 196, 0.5);
+  border: 2px dashed var(--color-text-gray);
+}
+
+.status-dot-todo {
+  border: 2px solid var(--color-text-gray);
+  background: transparent;
+}
+
+.status-dot-progress {
+  background-color: rgba(255, 183, 27, 0.5);
+  border: 2px solid var(--color-yellow, #FBBF24);
+}
+
+.status-dot-done {
+  background-color: rgba(0, 198, 88, 0.5);
+  border: 2px solid var(--color-green, #10B981);
+}

@@ -1,3 +1,5 @@
+// DEPRECATED. Онли фор щитс энд гиглс
+
 import React from 'react';
 import '../Header/Header.css';
 

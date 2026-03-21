@@ -1,79 +1,77 @@
 import React from 'react';
-import { Amphora, PiggyBank, Shield, Layers } from 'lucide-react';
+import { Amphora, Crown, PiggyBank, Crosshair, Shield, Bolt } from 'lucide-react'; // Я боюсь их удалять. Удалите их за меня.
 import { StatusBadge, DateBadge } from '../TaskComponents/TaskComponents';
 import './TaskCard.css';
+import Button from '../Buttons/Button';
 
-const TaskCard = ({ task, onDelete, onNextStatus }) => {
+import { getPriorityColor, getProjectInfo } from '../../constants.js';
 
-  const getPriorityColor = (p) => {
-    const priority = p ? p.toLowerCase() : 'green';
-
-    switch (priority) {
-      case 'red': return 'var(--color-red)';
-      case 'yellow': return 'var(--color-yellow)';
-      case 'green': return 'var(--color-green)';
-      default: return 'var(--color-green)';
-    }
-  };
-
-  const getProjectInfo = (proj) => {
-    const project = proj ? proj.toLowerCase() : 'nasledie';
-
-    switch (project) {
-      case 'economy':
-        return { icon: <PiggyBank size={18} />, color: '#B7791F' };
-      case 'defense':
-        return { icon: <Shield size={18} />, color: '#0057FF' };
-      case 'nasledie':
-      default:
-        return { icon: <Amphora size={18} />, color: '#FF5656' };
-    }
-  };
+const TaskCard = ({ task, employeesMap = {}, onClick, onEdit, onContextMenu }) => {
 
   const projectInfo = getProjectInfo(task.project);
+  const barColor = getPriorityColor(task.priority);
+  const ProjectIcon = projectInfo.icon;
 
-  const assigneeUrl = task.assigneeAvatar ? `/avatars/${task.assigneeAvatar}` : '/avatars/default.jpg';
-  const supervisorUrl = task.supervisorAvatar ? `/avatars/${task.supervisorAvatar}` : '/avatars/default.jpg';
+  const assignee = employeesMap[task.assigneeId];
+  const supervisor = employeesMap[task.supervisorId];
+
+  const assigneeUrl = assignee?.avatar ? `/avatars/${assignee.avatar}` : '/avatars/default.jpg';
+  const supervisorUrl = supervisor?.avatar ? `/avatars/${supervisor.avatar}` : '/avatars/default.jpg';
 
   return (
     <div
       className="task-card"
-      style={{ '--color-project': getPriorityColor(task.priority) }}
-      onClick={() => onNextStatus(task)}
-      onContextMenu={(e) => { e.preventDefault(); onDelete(task.id); }}
+      onClick={() => onClick && onClick(task)}
+      onContextMenu={(e) => { e.preventDefault(); onContextMenu && onContextMenu(task.id); }}
     >
-      {/* Цветная полоска (берет цвет из style выше) */}
-      <div className="task-color-strip"></div>
+      <div className="task-priority-bar" style={{ backgroundColor: barColor }}></div>
 
-      <div className="task-content">
+      <div className="task-header">
+        <span className="task-title" title={task.title}>{task.title}</span>
+        <Button 
+          variant="icon" 
+          title="Настройки" 
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit && onEdit(task);
+          }}
+        >
+          <Bolt size={24} color='var(--color-text-gray)'/>
+        </Button>
+      </div>
 
-        {/* Хедер: Иконка проекта и ID */}
-        <div className="task-header">
-          <div className="mini-project-icon" style={{ backgroundColor: projectInfo.color }}>
-            {projectInfo.icon}
+      <p className="task-desc">
+        {task.description || "Краткое описание задачи..."}
+      </p>
+
+      <div className="task-footer">
+        
+        <div className="task-badges-left">
+          <StatusBadge status={task.status ? task.status.toLowerCase() : 'todo'} />
+          <DateBadge date={task.deadline || "Не задан"} />
+          <div className="project-icon-badge" style={{ backgroundColor: projectInfo.color }}>
+            <ProjectIcon size={14} color="#FFF" />
           </div>
-          <span className="task-id">{task.displayId || `#${task.id}`}</span>
         </div>
 
-        {/* Название */}
-        <div className="task-title">{task.title}</div>
-
-        {/* Футер: Статус и Люди */}
-        <div className="task-footer">
-          <div className="task-badges-row">
-            <StatusBadge status={task.status ? task.status.toLowerCase() : 'todo'} />
-            <DateBadge date={task.deadline} />
-          </div>
-
-          <div className="task-assignees">
-            {/* Исполнитель */}
-            <div className="assignee-circle" title={`Assignee ID: ${task.assigneeId}`}>
-              <img src={assigneeUrl} alt="Assignee" onError={(e) => e.target.src = '/avatars/default.jpg'} />
-            </div>
-            {/* Супервайзер */}
-            <div className="assignee-circle" title="Supervisor">
-              <img src={supervisorUrl} alt="Supervisor" onError={(e) => e.target.src = '/avatars/default.jpg'} />
-            </div>
+        <div className="task-badges-right">
+          <span className="task-project-id">{task.displayId || `TSK-${task.id}`}</span>
+          
+          <div className="task-avatars">
+            <img 
+                src={supervisorUrl} 
+                alt="Supervisor" 
+                className="task-avatar" 
+                title={`Постановщик: ${supervisor?.name || 'Неизвестен'}`}
+                onError={(e) => { e.target.src = '/avatars/default.jpg'; }} 
+            />
+            <img 
+                src={assigneeUrl} 
+                alt="Assignee" 
+                className="task-avatar stacked" 
+                title={`Исполнитель: ${assignee?.name || 'Неизвестен'}`}
+                onError={(e) => { e.target.src = '/avatars/default.jpg'; }} 
+            />
           </div>
         </div>
 
