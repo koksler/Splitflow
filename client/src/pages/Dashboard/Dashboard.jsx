@@ -4,7 +4,7 @@ import { PROJECTS } from '../../constants';
 import SubHeader from '../../components/SubHeader/SubHeader';
 import './Dashboard.css';
 
-const Dashboard = ({ tasks, employeesMap }) => {
+const Dashboard = ({ tasks, employeesMap, onOpenModal}) => {
   
   const stats = useMemo(() => {
     const totalEmployees = Object.keys(employeesMap).length;
@@ -47,7 +47,7 @@ const Dashboard = ({ tasks, employeesMap }) => {
           </div>
           <div className="recent-tasks-list">
             {stats.recentTasks.map(task => (
-              <TaskCard key={task.id} task={task} employeesMap={employeesMap} />
+              <TaskCard key={task.id} onEdit={() => onOpenModal(task.status, task)} task={task} employeesMap={employeesMap} />
             ))}
           </div>
         </div>
