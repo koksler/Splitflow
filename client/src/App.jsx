@@ -7,33 +7,94 @@ import KanbanBoard from './pages/KanbanBoard/KanbanBoard';
 import EmployeesTable from './pages/EmployeesTable/EmployeesTable';
 import Login from './pages/Auth/Login';
 import SetupDB from './pages/Auth/SetupDB';
+import TaskModal from './components/TaskModal/TaskModal';
 
 // Константы и стили
 import { PROJECTS } from './constants';
 import './index.css';
 import './App.css';
 
-// API Эндпоинты (подставь свой порт, если отличается)
-const BASE_URL = "http://localhost:5268/api";
+const BASE_URL = "/api";
 const SETUP_API_URL = `${BASE_URL}/setup/status`;
 const AUTH_API_URL = `${BASE_URL}/auth/login`;
 const TASKS_API_URL = `${BASE_URL}/tasks`;
 const EMPLOYEES_API_URL = `${BASE_URL}/employees`;
 
 function App() {
-  // --- STATE: СИСТЕМНЫЙ ---
-  const [isAppReady, setIsAppReady] = useState(false); // Ждем проверки БД
+  const [isAppReady, setIsAppReady] = useState(false);
   const [authScreen, setAuthScreen] = useState(null);  // 'login' | 'setup'
-  const [user, setUser] = useState(null);              // Текущий юзер
+  const[user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('splitflow_user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-  // --- STATE: ИНТЕРФЕЙС ---
   const [activeTab, setActiveTab] = useState('analytics');
   const [currentProject, setCurrentProject] = useState(PROJECTS.ALL.id);
 
-  // --- STATE: ГЛОБАЛЬНЫЕ ДАННЫЕ ---
   const [tasks, setTasks] = useState([]);
   const [employeesMap, setEmployeesMap] = useState({});
   const [isDataLoading, setIsDataLoading] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [modalInitialStatus, setModalInitialStatus] = useState('todo');
+
+    const handleOpenModal = (status, task = null) => {
+      setModalInitialStatus(status);
+      setEditingTask(task);
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setEditingTask(null);
+    };
+  
+    const handleSaveTask = async (taskData, taskId) => {
+      try {
+        const isEditing = !!taskId;
+        const url = isEditing ? `${TASKS_API_URL}/${taskId}` : TASKS_API_URL;
+        const method = isEditing ? "PUT" : "POST";
+  
+        if (isEditing) taskData.id = taskId;
+  
+        const res = await fetch(url, {
+          method: method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(taskData)
+        });
+  
+        if (!res.ok) throw new Error("Ошибка при сохранении задачи");
+  
+        if (isEditing) {
+          setTasks(prev => prev.map(t => t.id === taskId ? { ...t, ...taskData } : t));
+        } else {
+          const newTaskFromBackend = await res.json();
+          setTasks(prev => [...prev, newTaskFromBackend]);
+        }
+  
+        handleCloseModal();
+      } catch (error) {
+        console.error(error);
+        alert("Не удалось сохранить задачу.");
+      }
+    };
+  
+    // УДАЛЕНИЕ
+    const handleDeleteTask = async (taskId) => {
+      if (!window.confirm("Удалить эту задачу навсегда?")) return;
+  
+      try {
+        const res = await fetch(`${TASKS_API_URL}/${taskId}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Ошибка удаления");
+  
+        setTasks(prev => prev.filter(t => t.id !== taskId));
+        handleCloseModal();
+      } catch (error) {
+        console.error(error);
+        alert("Не удалось удалить задачу.");
+      }
+    };
 
   // 1. ИНИЦИАЛИЗАЦИЯ: Проверяем, настроена ли БД на бэкенде
   useEffect(() => {
@@ -44,7 +105,7 @@ function App() {
         setAuthScreen(data.isConfigured ? 'login' : 'setup');
       } catch (err) {
         console.error("Бэкенд недоступен");
-        setAuthScreen('setup'); // Если бэк лежит, отправляем на настройку
+        setAuthScreen('setup');
       } finally {
         setIsAppReady(true);
       }
@@ -67,12 +128,15 @@ function App() {
         const employeesData = await empRes.json();
         const rawTasks = await tasksRes.json();
 
-        // Превращаем массив сотрудников в Map для мгновенного поиска по ID
         const eMap = {};
-        employeesData.forEach(emp => { eMap[emp.id] = emp; });
+        employeesData.forEach(emp => {
+          const empId = emp.id !== undefined ? emp.id : emp.Id; 
+          if (empId !== undefined) {
+            eMap[empId] = emp;
+          }
+        });
         setEmployeesMap(eMap);
 
-        // Нормализуем задачи (приводим проекты к единому виду из constants.js)
         const normalizedTasks = rawTasks.map(t => {
           let p = t.project ? t.project.toLowerCase() : 'nasledie';
           if (p === 'defense') p = 'zashita';
@@ -101,22 +165,25 @@ function App() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-
+  
       if (res.ok) {
         setUser(data.user);
+        // СОХРАНЯЕМ СЕССИЮ
+        localStorage.setItem('splitflow_user', JSON.stringify(data.user)); 
       } else {
-        alert(data.message || "Ошибка входа");
+        alert("Ошибка входа: " + data.message);
       }
     } catch (err) {
-      alert("Сервер авторизации не отвечает");
+      alert("Сервер не доступен");
     }
   };
 
   const handleLogout = () => {
     setUser(null);
+    localStorage.removeItem('splitflow_user'); 
     setAuthScreen('login');
     setActiveTab('analytics');
-    setTasks([]);
+    setCurrentProject(PROJECTS?.ALL?.id || 'all');
   };
 
   // Обновление статуса (Drag-n-Drop в Канбане)
@@ -136,11 +203,6 @@ function App() {
     } catch (err) {
       console.error("Не удалось сохранить статус на сервере");
     }
-  };
-
-  const handleOpenModal = (status, task = null) => {
-    // Тут будет логика открытия TaskModal
-    console.log("Open Modal for:", status, task);
   };
 
   // --- РЕНДЕРИНГ ---
@@ -174,7 +236,7 @@ function App() {
           ) : (
             <>
               {activeTab === 'analytics' && (
-                <Dashboard tasks={tasks} employeesMap={employeesMap} />
+                <Dashboard tasks={tasks} employeesMap={employeesMap} onOpenModal={handleOpenModal} />
               )}
               {activeTab === 'kanban' && (
                 <KanbanBoard 
@@ -186,12 +248,25 @@ function App() {
                 />
               )}
               {activeTab === 'employees' && (
-                <EmployeesTable employees={Object.values(employeesMap)} />
+                <EmployeesTable employeesMap={employeesMap} />
               )}
             </>
           )}
         </main>
+        {user && (
+      <TaskModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSaveTask}
+        onDelete={handleDeleteTask}
+        task={editingTask}
+        initialStatus={modalInitialStatus}
+        employeesMap={employeesMap}
+        currentUser={user}
+      />
+    )}
       </div>
+      
     );
   }
 
