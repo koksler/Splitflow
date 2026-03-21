@@ -37,3 +37,5 @@ logs/
 client\dist\avatars
 
 .working-assets
+/SplitflowApi/wwwroot
+/SplitflowApi/wwwroot
