@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { ListChevronsDownUp, ListChevronsUpDown, CirclePlus } from 'lucide-react';
 import Button from '../../components/Buttons/Button';
 import SubHeader from '../../components/SubHeader/SubHeader';
-import TaskCard from '../../components/TaskCard/TaskCard'; // Подключим позже
+import TaskCard from '../../components/TaskCard/TaskCard';
 import './KanbanBoard.css';
 
 const COLUMNS =[
@@ -12,7 +12,7 @@ const COLUMNS =[
   { id: 'done', title: 'DONE', dotClass: 'status-dot-done' }
 ];
 
-const KanbanBoard = ({ tasks =[], currentProject, onUpdateTaskStatus, onOpenModal }) => {
+const KanbanBoard = ({ tasks, currentProject, employeesMap, onUpdateTaskStatus, onOpenModal, onRefetch }) => {
   const [collapsedCols, setCollapsedCols] = useState({ backlog: false, todo: false, progress: false, done: false });
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState(null); // 'date' | 'name' | null
@@ -21,22 +21,18 @@ const KanbanBoard = ({ tasks =[], currentProject, onUpdateTaskStatus, onOpenModa
   const processedTasks = useMemo(() => {
     let result =[...tasks];
 
-    // 1. Фильтр по проекту (из хедера)
     if (currentProject !== 'all') {
       result = result.filter(t => t.project?.toLowerCase() === currentProject.toLowerCase());
     }
 
-    // 2. Поиск по названию
     if (searchQuery) {
       result = result.filter(t => t.title.toLowerCase().includes(searchQuery.toLowerCase()));
     }
 
-    // 3. Фильтр по приоритету
     if (filterPriority) {
       result = result.filter(t => t.priority === filterPriority);
     }
 
-    // 4. Сортировка
     if (sortBy === 'name') {
       result.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortBy === 'date') {
@@ -66,22 +62,33 @@ const KanbanBoard = ({ tasks =[], currentProject, onUpdateTaskStatus, onOpenModa
     }
   };
 
+  const handleCsvUpload = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch("/api/tasks/upload-csv", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        alert(`Успешно! Загружено задач: ${result.count}`);
+        
+        if (onRefetch) onRefetch(); 
+      } else {
+        alert("Ошибка при загрузке задач");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка сети");
+    }
+  };
+
 
   const toggleColumn = (colId) => {
     setCollapsedCols(prev => ({ ...prev, [colId]: !prev[colId] }));
-  };
-
-  const handleSortClick = () => {
-    if (!sortBy) setSortBy('date');
-    else if (sortBy === 'date') setSortBy('name');
-    else setSortBy(null);
-  };
-
-  const handleFilterClick = () => {
-    if (!filterPriority) setFilterPriority('red');
-    else if (filterPriority === 'red') setFilterPriority('yellow');
-    else if (filterPriority === 'yellow') setFilterPriority('green');
-    else setFilterPriority(null);
   };
 
 
@@ -93,8 +100,13 @@ const KanbanBoard = ({ tasks =[], currentProject, onUpdateTaskStatus, onOpenModa
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         onAddClick={() => onOpenModal('todo')}
-        onSortClick={handleSortClick}
-        onFilterClick={handleFilterClick}
+        
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        
+        filterPriority={filterPriority}
+        onFilterChange={setFilterPriority} 
+        onCsvUpload={handleCsvUpload}
       />
 
       {/* ДОСКА */}
@@ -132,11 +144,10 @@ const KanbanBoard = ({ tasks =[], currentProject, onUpdateTaskStatus, onOpenModa
               <div className="kanban-tasks">
                 {colTasks.map(task => (
                   <div 
-                    key={task.id} 
                     draggable 
                     onDragStart={(e) => handleDragStart(e, task.id)}
                   >
-                    <TaskCard task={task} onEdit={() => onOpenModal(col.id, task)} />
+                    <TaskCard key={task.id} onEdit={() => onOpenModal(task.status, task)} task={task} employeesMap={employeesMap} />
                   </div>
                 ))}
               </div>

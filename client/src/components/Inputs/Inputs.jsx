@@ -14,14 +14,16 @@ const Input = ({
     placeholder,
     value,
     onChange,
+    name,
     style,
+    ...props
 }) => {
     const isSearch = variant === 'search' || variant === 'search-muted';
 
     const inputClass = [
         'custom-input',
         isSearch ? 'input-search' : '',
-        variant === 'search-muted',
+        variant === 'search-muted' ? 'input-search-muted' : '',
     ].filter(Boolean).join(' ');
 
     return (
@@ -32,6 +34,8 @@ const Input = ({
                 </span>
             )}
             <input
+                {...props}
+                name={name}
                 className={inputClass}
                 type={type}
                 placeholder={placeholder}
