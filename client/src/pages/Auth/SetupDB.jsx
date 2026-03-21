@@ -16,7 +16,7 @@ const SetupDB = ({ onSetupComplete, onGoToLogin }) => {
 
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:5268/api/setup/init', {
+            const response = await fetch('/api/setup/init', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,7 +33,6 @@ const SetupDB = ({ onSetupComplete, onGoToLogin }) => {
                 alert("База данных успешно создана и инициализирована!");
                 if (onSetupComplete) onSetupComplete();
             } else {
-                // Сервер вернул ошибку (например, неверный пароль)
                 alert("Ошибка: " + data.message);
             }
         } catch (error) {
@@ -42,11 +41,6 @@ const SetupDB = ({ onSetupComplete, onGoToLogin }) => {
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const handleImport = () => {
-        // TODO: Логика загрузки .bak или .sql файла
-        alert("Функция импорта бэкапа находится в разработке.");
     };
 
     return (
@@ -99,10 +93,6 @@ const SetupDB = ({ onSetupComplete, onGoToLogin }) => {
                     <div className="setup-divider">
                         <span>или</span>
                     </div>
-
-                    <Button variant="full-unfocused" onClick={handleImport}>
-                        Импортировать backup файл
-                    </Button>
                     
                     <Button variant="full-unfocused" onClick={onGoToLogin}>
                         Войти через подключенную БД

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../components/Buttons/Button';
 import Input from '../../components/Inputs/Inputs';
-import './Login.css'; // Импортируем только стили логина
+import './Login.css';
 
 const Login = ({ onLogin, onGoToSetup }) => {
     const [email, setEmail] = useState('');
@@ -18,12 +18,9 @@ const Login = ({ onLogin, onGoToSetup }) => {
     return (
         <div className="login-page">
             
-            {/* ЛЕВАЯ ЧАСТЬ */}
             <div className="login-sidebar">
-                {/* Главный логотип */}
                 <img src="/logo-main.png" alt="Splitflow" className="login-logo-main" />
                 
-                {/* Карточка формы */}
                 <div className="login-form-card">
                     <div className="login-input-group">
                         <span className="login-input-label">E-mail</span>
@@ -65,11 +62,9 @@ const Login = ({ onLogin, onGoToSetup }) => {
                     </Button>
                 </div>
 
-                {/* Логотип в подвале */}
                 <img src="/logo-visk.png" alt="VISK" className="login-logo-footer" />
             </div>
             
-            {/* ПРАВАЯ ЧАСТЬ */}
             <div className="login-cover-section">
                 <div className="login-cover-vector">
                     <img src="/cover-image.png" alt="Cover" className="login-cover-image" />

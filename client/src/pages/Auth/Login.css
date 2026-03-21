@@ -6,7 +6,6 @@
   overflow: hidden;
 }
 
-/* ЛЕВАЯ ЧАСТЬ */
 .login-sidebar {
   flex: 1;
   display: flex;
@@ -76,7 +75,6 @@
   margin: 5px auto;
 }
 
-  /* Разделитель "или" */
 .login-divider::before,
 .login-divider::after {
   margin-left: 20px;
@@ -90,7 +88,6 @@
 .login-divider::after { margin-left: 15px; }
 
 
-/* ПРАВАЯ ЧАСТЬ */
 .login-cover-section {
   flex: 1;
   padding: 30px;  
